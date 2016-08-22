@@ -13,6 +13,7 @@ namespace ScanningGun.entity
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int64 Id { get; set; }
+
         public String barCode { get; set; }
         public String Name { get; set; }
         public int cateogory { get; set; }

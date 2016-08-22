@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScanningGun.entity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,11 +16,22 @@ namespace ScanningGun
     {
         public Form1()
         {
-            ////SQLiteConnection.CreateFile("InventoryDB.db");
-            InventoryContext inc = new InventoryContext();
-            inc.Goods.Add(new entity.GoodsEntity { barCode="11111"});
-            inc.Goods
+
+            using (InventoryContext db = new InventoryContext())
+            {
+                db.Goods.Add(new entity.GoodsEntity { barCode = "sdfsafsafsdfas" });
+                db.SaveChanges();
+
+                var query = from b in db.Goods
+                            orderby b.Name
+                            select b;
+
+                List<GoodsEntity> goods = query.ToList();
+            }
+
+             
             InitializeComponent();
         }
+
     }
 }
