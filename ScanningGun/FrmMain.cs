@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
@@ -56,26 +57,7 @@ namespace ScanningGun
                     }
                     else
                     {
-                        var newgood = new GoodsEntity
-                        {
-                            barCode = tbtiaoma.Text,
-                            Name = tbname.Text,
-                         quanty=int.Parse(tbkucun.Text)
-                        };
-
-                        foreach (Control c in groupBox1.Controls)//遍历groupBox1中的所有空间
-                        {
-                            if (c is RadioButton)//判断该控件是不是RadioButton
-                            {
-                                RadioButton r = (RadioButton)c;//做转化
-                                bool rbState = r.Checked;//得到Checked状态
-                                if (r.Checked)
-                                {
-                                    newgood.cateogory =int.Parse(r.Tag.ToString());
-                                }
-                            }
-                        }
-
+                        var newgood = BuildGood();
                         db.Goods.Add(newgood);
                     }
                 }
@@ -135,6 +117,73 @@ namespace ScanningGun
             }
         }
 
+        private void tbkucun_KeyDown(object sender, KeyEventArgs e)
+        {
+            int kucun;
+            int.TryParse(tbkucun.Text, out kucun);
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Add)
+            {
+                kucun = kucun + 1;
+            }
+            else if (e.KeyCode == Keys.Down || e.KeyCode == Keys.Subtract) {
+                kucun = kucun - 1;
+            }
 
+            tbkucun.Text = kucun.ToString();
+        }
+
+        private void btsava_Click(object sender, EventArgs e)
+        {
+            GoodsEntity good;
+
+            using (var db = new InventoryContext())
+            {
+                good = db.Goods.FirstOrDefault(c => c.barCode == tbtiaoma.Text);
+            }
+
+            if (good != null && good.Id > 0)
+            {
+                using (var dbCtx = new InventoryContext())
+                {
+                    dbCtx.Entry(good).State = EntityState.Modified;
+                    dbCtx.SaveChanges();
+                }
+            }
+            else
+            {
+                using (var db = new InventoryContext())
+                {
+                    good= BuildGood();
+                    db.Goods.Add(good);
+                    db.SaveChanges();
+                }
+            }
+
+        }
+
+        private GoodsEntity BuildGood()
+        {
+            var newgood = new GoodsEntity
+            {
+                barCode = tbtiaoma.Text,
+                Name = tbname.Text,
+                quanty = int.Parse(tbkucun.Text)
+            };
+
+            foreach (Control c in groupBox1.Controls)//遍历groupBox1中的所有空间
+            {
+                if (c is RadioButton)//判断该控件是不是RadioButton
+                {
+                    RadioButton r = (RadioButton)c;//做转化
+                    bool rbState = r.Checked;//得到Checked状态
+                    if (r.Checked)
+                    {
+                        newgood.cateogory = int.Parse(r.Tag.ToString());
+                    }
+                }
+            }
+
+            return newgood;
+        }
     }
 }

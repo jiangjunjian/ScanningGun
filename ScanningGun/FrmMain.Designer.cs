@@ -45,6 +45,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.tbkucun = new System.Windows.Forms.TextBox();
+            this.btsava = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -188,12 +189,24 @@
             this.tbkucun.Name = "tbkucun";
             this.tbkucun.Size = new System.Drawing.Size(144, 21);
             this.tbkucun.TabIndex = 16;
+            this.tbkucun.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbkucun_KeyDown);
+            // 
+            // btsava
+            // 
+            this.btsava.Location = new System.Drawing.Point(162, 501);
+            this.btsava.Name = "btsava";
+            this.btsava.Size = new System.Drawing.Size(75, 23);
+            this.btsava.TabIndex = 17;
+            this.btsava.Text = "保存";
+            this.btsava.UseVisualStyleBackColor = true;
+            this.btsava.Click += new System.EventHandler(this.btsava_Click);
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(929, 549);
+            this.Controls.Add(this.btsava);
             this.Controls.Add(this.tbkucun);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox1);
@@ -237,6 +250,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbkucun;
+        private System.Windows.Forms.Button btsava;
     }
 }
 

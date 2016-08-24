@@ -24,7 +24,6 @@ D:\work\code\github\ScanningGun\ScanningGun\bin\Debug\System.Data.SQLite.EF6.dll
 D:\work\code\github\ScanningGun\ScanningGun\bin\Debug\EntityFramework.xml
 D:\work\code\github\ScanningGun\ScanningGun\bin\Debug\EntityFramework.SqlServer.xml
 D:\work\code\github\ScanningGun\ScanningGun\bin\Debug\System.Data.SQLite.xml
-D:\work\code\github\ScanningGun\ScanningGun\obj\Debug\ScanningGun.csprojResolveAssemblyReference.cache
 D:\work\code\github\ScanningGun\ScanningGun\obj\Debug\ScanningGun.FrmMain.resources
 D:\work\code\github\ScanningGun\ScanningGun\obj\Debug\ScanningGun.Properties.Resources.resources
 D:\work\code\github\ScanningGun\ScanningGun\obj\Debug\ScanningGun.csproj.GenerateResource.Cache
