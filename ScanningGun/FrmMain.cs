@@ -68,14 +68,14 @@ namespace ScanningGun
                 //2. 显示名称库存
                 // 3.填写库存 + -
 
-                textBox1.Text = barCode.KeyName;
-                textBox2.Text = barCode.VirtKey.ToString();
-                textBox3.Text = barCode.ScanCode.ToString();
-                textBox4.Text = barCode.Ascll.ToString();
-                textBox5.Text = barCode.Chr.ToString();
-                textBox6.Text = barCode.IsValid ? barCode.BarCode : "";//是否为扫描枪输入，如果为true则是 否则为键盘输入
+                ////textBox1.Text = barCode.KeyName;
+                ////textBox2.Text = barCode.VirtKey.ToString();
+                ////textBox3.Text = barCode.ScanCode.ToString();
+                ////textBox4.Text = barCode.Ascll.ToString();
+                ////textBox5.Text = barCode.Chr.ToString();
+                ////textBox6.Text = barCode.IsValid ? barCode.BarCode : "";//是否为扫描枪输入，如果为true则是 否则为键盘输入
 
-                textBox7.Text += barCode.KeyName;
+                ////textBox7.Text += barCode.KeyName;
                 //MessageBox.Show(barCode.IsValid.ToString());
             }
         }
@@ -109,13 +109,13 @@ namespace ScanningGun
             BarCode.Stop();
         }
 
-        private void textBox6_TextChanged(object sender, EventArgs e)
-        {
-            if (textBox6.Text.Length > 0)
-            {
-                MessageBox.Show("条码长度：" + textBox6.Text.Length + "\n条码内容：" + textBox6.Text, "系统提示");
-            }
-        }
+        //private void textBox6_TextChanged(object sender, EventArgs e)
+        //{
+        //    if (textBox6.Text.Length > 0)
+        //    {
+        //        MessageBox.Show("条码长度：" + textBox6.Text.Length + "\n条码内容：" + textBox6.Text, "系统提示");
+        //    }
+        //}
 
         private void tbkucun_KeyDown(object sender, KeyEventArgs e)
         {
@@ -184,6 +184,20 @@ namespace ScanningGun
             }
 
             return newgood;
+        }
+
+        private void navigationBar1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ////this.Close();
+            ListForm listform = new ListForm();
+            listform.Show();
+
+            ////this.ShowDialog(this);
         }
     }
 }
