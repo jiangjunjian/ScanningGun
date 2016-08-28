@@ -15,68 +15,86 @@ namespace ScanningGun
 {
     public partial class FrmMain : Form
     {
-        InventoryContext db = new InventoryContext();
         BardCodeHooK BarCode = new BardCodeHooK();
         public FrmMain()
         {
             InitializeComponent();
             BarCode.BarCodeEvent += new BardCodeHooK.BardCodeDeletegate(BarCode_BarCodeEvent);
+
         }
 
         private delegate void ShowInfoDelegate(BardCodeHooK.BarCodes barCode);
         private void ShowInfo(BardCodeHooK.BarCodes barCode)
         {
-            if (this.InvokeRequired)
-            {
-                this.BeginInvoke(new ShowInfoDelegate(ShowInfo), new object[] { barCode });
-            }
-            else
-            {
 
-                tbtiaoma.Text = barCode.IsValid ? barCode.BarCode : "";
-                if (!string.IsNullOrEmpty(tbtiaoma.Text))
+            try
+            {
+                if (this.InvokeRequired)
                 {
-                    var goodinfo = db.Goods.First(c => c.barCode == tbtiaoma.Text);
+                    this.BeginInvoke(new ShowInfoDelegate(ShowInfo), new object[] { barCode });
+                }
+                else
+                {
 
-                    if (goodinfo != null)
+                    tbtiaoma.Text = barCode.IsValid ? barCode.BarCode.Replace("\r", "") : "";
+                    if (!string.IsNullOrEmpty(tbtiaoma.Text))
                     {
-                        tbname.Text = goodinfo.Name;
-                        tbtiaoma.Text = goodinfo.barCode;
-                        tbkucun.Text = goodinfo.quanty.ToString();
-                        foreach (Control c in groupBox1.Controls)//遍历groupBox1中的所有空间
+                        GoodsEntity goodinfo;
+
+                        using (var db = new InventoryContext())
                         {
-                            if (c is RadioButton)//判断该控件是不是RadioButton
+                            goodinfo = db.Goods.FirstOrDefault(c => c.barCode == tbtiaoma.Text);
+                        }
+
+
+                        if (goodinfo != null)
+                        {
+                            tbname.Text = goodinfo.Name;
+                            tbtiaoma.Text = goodinfo.barCode;
+                            tbkucun.Text = goodinfo.quanty.ToString();
+                            foreach (Control c in groupBox1.Controls)//遍历groupBox1中的所有空间
                             {
-                                RadioButton r = (RadioButton)c;//做转化
-                                if (r.Tag.ToString()==goodinfo.cateogory.ToString())
+                                if (c is RadioButton)//判断该控件是不是RadioButton
                                 {
-                                    r.Checked = true;
+                                    RadioButton r = (RadioButton)c;//做转化
+                                    if (r.Tag.ToString() == goodinfo.cateogory.ToString())
+                                    {
+                                        r.Checked = true;
+                                    }
                                 }
                             }
                         }
+                        else
+                        {
+                            var newgood = BuildGood();
+                            using (var db = new InventoryContext())
+                            {
+                                db.Goods.Add(newgood);
+                                db.SaveChanges();
+                            }
+                        }
                     }
-                    else
-                    {
-                        var newgood = BuildGood();
-                        db.Goods.Add(newgood);
-                    }
+
+
+                    ///// 触发扫描事件
+                    //1.判断是否有录入
+                    //2. 显示名称库存
+                    // 3.填写库存 + -
+
+                    ////textBox1.Text = barCode.KeyName;
+                    ////textBox2.Text = barCode.VirtKey.ToString();
+                    ////textBox3.Text = barCode.ScanCode.ToString();
+                    ////textBox4.Text = barCode.Ascll.ToString();
+                    ////textBox5.Text = barCode.Chr.ToString();
+                    ////textBox6.Text = barCode.IsValid ? barCode.BarCode : "";//是否为扫描枪输入，如果为true则是 否则为键盘输入
+
+                    ////textBox7.Text += barCode.KeyName;
+                    //MessageBox.Show(barCode.IsValid.ToString());
                 }
+            }
+            catch (Exception ex)
+            {
 
-
-                ///// 触发扫描事件
-                //1.判断是否有录入
-                //2. 显示名称库存
-                // 3.填写库存 + -
-
-                ////textBox1.Text = barCode.KeyName;
-                ////textBox2.Text = barCode.VirtKey.ToString();
-                ////textBox3.Text = barCode.ScanCode.ToString();
-                ////textBox4.Text = barCode.Ascll.ToString();
-                ////textBox5.Text = barCode.Chr.ToString();
-                ////textBox6.Text = barCode.IsValid ? barCode.BarCode : "";//是否为扫描枪输入，如果为true则是 否则为键盘输入
-
-                ////textBox7.Text += barCode.KeyName;
-                //MessageBox.Show(barCode.IsValid.ToString());
             }
         }
 
@@ -167,7 +185,7 @@ namespace ScanningGun
             {
                 barCode = tbtiaoma.Text,
                 Name = tbname.Text,
-                quanty = int.Parse(tbkucun.Text)
+                quanty = string.IsNullOrEmpty(tbkucun.Text)?0: int.Parse(tbkucun.Text),
             };
 
             foreach (Control c in groupBox1.Controls)//遍历groupBox1中的所有空间
@@ -196,6 +214,8 @@ namespace ScanningGun
             ////this.Close();
             ListForm listform = new ListForm();
             listform.Show();
+
+
 
             ////this.ShowDialog(this);
         }

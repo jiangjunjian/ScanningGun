@@ -27,6 +27,9 @@ namespace ScanningGun
         public ListForm()
         {
             InitializeComponent();
+            ///this.dgvInfo.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;  //自动调动datagridview的行高度
+            ////dgvInfo.AutoSizeColumnsMode = DataGridViewAutoSizeColumnMode.AllCells;//自动调动datagrid死的宽度
+            ///this.dgvInfo.DefaultCellStyle.WrapMode = DataGridViewTriState.True;//设置datagridview字段显示部的内容;
         }
 
         public DataTable Listtodt(List<GoodsEntity> goods)
@@ -81,13 +84,22 @@ namespace ScanningGun
             pageCount = (total / pageSize);    //计算出总页数
             if ((total % pageSize) > 0) pageCount++;
 
-            ///lblPageCount.Text = pageCount.ToString();
-            //// txtCurrentPage.Text = Convert.ToString(pageCurrent);
+            if (pageCurrent == 1)
+            {
+                ///bdnInfo.MoveFirstItem.Enabled = false;
+               /// bdnInfo.MovePreviousItem.Enabled = false;
+            }
+            else
+            {
+                ///bdnInfo.MoveFirstItem.Enabled = true;
+                ///bdnInfo.MovePreviousItem.Enabled = true;
+            }
 
-
-            bdsInfo.DataSource = dttable;
-            bdnInfo.BindingSource = bdsInfo;
+            bdsInfo.DataSource = dttable;          
+            ///bdnInfo.BindingSource = bdsInfo;
             dgvInfo.DataSource = bdsInfo;
+            dgvInfo.Height = this.Height * 80/100;
+            ///dgvInfo.RowCount = dttable.Rows.Count;
         }
 
         private void bindingNavigator1_RefreshItems(object sender, EventArgs e)
@@ -136,6 +148,11 @@ namespace ScanningGun
         private void button1_Click(object sender, EventArgs e)
         {
             binddata();
+        }
+
+        private void dgvInfo_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
